@@ -486,4 +486,6 @@ int main(){
 
     };KRUSKAL();
 
+    return 0;
+
 }
