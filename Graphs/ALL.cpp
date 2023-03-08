@@ -3,6 +3,11 @@ using namespace std;
 
 int main(){
 
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(0);
+    cin.exceptions(ios::badbit|ios::failbit);
+
     auto DFS=[&](){
         int node,edges;
         cin>>node>>edges;
