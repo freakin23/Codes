@@ -1,32 +1,30 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-int main(){
+int main() {
     
-    ios_base::sync_with_stdio(false);
+    ios_base :: sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(0);
-    cin.exceptions(ios::badbit|ios::failbit);
+    cin.exceptions(ios :: badbit | ios :: failbit);
 
-    auto LIS=[&](){
+    auto Longest_Increasing_Subsequence = [&] () {
         int n;
-        cin>>n;
+        cin >> n;
         vector<int> dp;
-
-        for(int i=1;i<=n;i++){
+        for (int i = 1; i <= n; i++) {
             int x;
-            cin>>x;
-            auto it=lower_bound(dp.begin(),dp.end(),x);
-            if(it==dp.end()){
+            cin >> x;
+            auto it = lower_bound(begin(dp), end(dp), x);
+            if (it == dp.end()) {
                 dp.push_back(x);
             }
-            else{
-                *it=x;
+            else {
+                *it = x;
             }
         }
-        cout<<(int)dp.size();
-
-    };LIS();
-
+        cout << (int)dp.size() << '\n';
+    };Longest_Increasing_Subsequence();
+    
     return 0;
 }
