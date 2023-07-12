@@ -28,7 +28,9 @@ int main() {
             for (auto u : G) {
                 int a, b, w;
                 tie(a, b, w) = u;
-                dis[b] = min(dis[b], dis[a] + w);
+                if (dis[a] + w < dis[b]) {
+                    dis[b] = dis[a] + w;
+                }
             }
         }
 
