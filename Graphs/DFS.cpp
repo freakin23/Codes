@@ -1,45 +1,44 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-int main(){
-    ios_base::sync_with_stdio(false);
+int main() {
+
+    ios_base :: sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(0);
-    cin.exceptions(ios::badbit|ios::failbit);
+    cin.exceptions(ios :: badbit | ios :: failbit);
 
-    auto DFS=[&](){
-        int node,edges;
-        cin>>node>>edges;
-        vector<int> adj[node+4];
-        vector<bool> vis(node+4);
+    auto Depth_First_Search = [&] () {
+        const int N = 4E4 + 4;
+        vector<int> adj[N];
+        vector<bool> used(N, false);
 
-        for(int i=1;i<=edges;i++){
-            int u,v;
-            cin>>u>>v;
+        int nodes, edges;
+        cin >> nodes >> edges;
+        for (int i = 1; i <= edges; i++) {
+            int u, v;
+            cin >> u >> v;
             adj[u].push_back(v);
             adj[v].push_back(u);
         }
 
-        function<void(int)> Dfs=[&](int j){
-            vis[j]=true;
-            for(auto u:adj[j]){
-                if(!vis[u]){
-                    Dfs(u);
+        auto Dfs = [&] (auto Dfs, int j) {
+            if (used[j]) {
+                return;
+            }
+            used[j] = true;
+            for (auto u : adj[j]) {
+                if (!used[u]) {
+                    Dfs(Dfs, u);
                 }
             }
-        };
+        };Dfs(Dfs, 1);
 
-        for(int i=1;i<=node;i++){
-            if(!vis[i]){
-                Dfs(i);
-            }
+        for (int i = 1; i <= nodes; i++) {
+            cout << used[i] << " \n"[i == nodes];
         }
 
-        for(int i=1;i<=node;i++){
-            cout<<vis[i]<<" \n"[i==node];
-        }
-
-    };DFS();
-
+    };Depth_First_Search();
+    
     return 0;
 }
