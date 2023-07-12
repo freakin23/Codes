@@ -1,51 +1,50 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-int main(){
-    ios_base::sync_with_stdio(false);
+int main() {
+
+    ios_base :: sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(0);
-    cin.exceptions(ios::badbit|ios::failbit);
+    cin.exceptions(ios :: badbit | ios :: failbit);
 
-    auto BFS=[&](){
-        int node,edges;
-        cin>>node>>edges;
-        vector<int> adj[node+4],dst(node+4);
-        vector<bool> used(node+4);
-        queue<int> q;
+    auto Breadth_First_Search = [&] () {
+        
+        const int N = 4E4 + 4;
+        vector<int> adj[N];
+        vector<bool> used(N, false);
+        vector<int> dis(N + 4, 0);
+        queue<int> Q;
+        int nodes, edges;
+        cin >> nodes >> edges;
 
-        for(int i=1;i<=edges;i++){
-            int u,v;
-            cin>>u>>v;
+        for (int i = 1; i <= edges; i++) {
+            int u, v;
+            cin >> u >> v;
             adj[u].push_back(v);
-            adj[v].push_back(u);
         }
 
-        int from;
-        cin>>from;
-
-        auto Bfs=[&](int j){
-            dst[j]=0;
-            q.push(j);
-
-            while(!q.empty()){
-                int s=q.front();
-                q.pop();
-                for(auto u:adj[s]){
-                    if(!used[u]){
-                        used[u]=true;
-                        dst[u]=dst[s]+1;
-                        q.push(u);
+        function<void(int)> Bfs = [&] (int j) -> void {
+            dis[j] = 0;
+            Q.push(j);
+            while (!Q.empty()) {
+                int a = Q.front();
+                Q.pop();
+                for (auto u : adj[a]) {
+                    if (!used[u]) {
+                        used[u] = true;
+                        dis[u] = dis[a] + 1;
+                        Q.push(u);
                     }
                 }
             }
+        };Bfs(1);
 
-            for(int i=1;i<=node;i++){
-                cout<<dst[i]<<" \n"[i==node];
-            }
-        };Bfs(from);
+        for (int i = 1; i <= nodes; i++) {
+            cout << dis[i] << " \n"[i == nodes];
+        }
 
-    };BFS();
+    };Breadth_First_Search();
 
     return 0;
 }
