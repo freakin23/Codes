@@ -8,7 +8,7 @@ int main() {
     cout.tie(0);
     cin.exceptions(ios :: badbit | ios :: failbit);
 
-    auto Breadth_First_Search = [&] () {
+    auto Breadth_First_Search = [&] () -> void{
         
         const int N = 4E4 + 4;
         vector<int> adj[N];

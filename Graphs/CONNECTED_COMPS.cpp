@@ -8,7 +8,7 @@ int main() {
     cout.tie(0);
     cin.exceptions(ios :: badbit | ios :: failbit);
 
-    auto Connected_Componets = [&] () {
+    auto Connected_Componets = [&] () -> void {
 
         const int N = 4E4 + 4;
         vector<int> adj[N];
@@ -24,7 +24,7 @@ int main() {
             adj[v].push_back(u);
         }
 
-        function<void(vector<int> &, int)> Dfs = [&] (vector<int> &c, int j) {
+        function<void(vector<int> &, int)> Dfs = [&] (vector<int> &c, int j) -> void {
             used[j] = true;
             c.push_back(j);
             for (auto u : adj[j]) {

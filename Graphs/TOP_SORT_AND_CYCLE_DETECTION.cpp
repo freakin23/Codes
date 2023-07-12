@@ -8,7 +8,7 @@ int main() {
     cout.tie(0);
     cin.exceptions(ios :: badbit | ios :: failbit);
 
-    auto Top_Sort_and_Cycle_Detection = [&] () {
+    auto Top_Sort_and_Cycle_Detection = [&] () -> void {
 
         const int N = 4E4 + 4;
         vector<int> adj[N];
@@ -23,8 +23,8 @@ int main() {
             adj[u].push_back(v);
         }
 
-        auto Dfs = [&] (auto Dfs, int j) {
-            
+        auto Dfs = [&] (auto Dfs, int j) -> void {
+
             if (used1[j]) {
                 return;
             }
