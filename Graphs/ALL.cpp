@@ -3,493 +3,520 @@ using namespace std;
 
 int main(){
 
-    ios_base::sync_with_stdio(false);
+    ios_base :: sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(0);
-    cin.exceptions(ios::badbit|ios::failbit);
+    cin.exceptions(ios :: badbit | ios :: failbit);
 
-    auto DFS=[&](){
-        int node,edges;
-        cin>>node>>edges;
-        vector<int> adj[node+4];
-        vector<bool> vis(node+4);
+    auto Depth_First_Search = [&] () -> void {
+        const int N = 4E4 + 4;
+        vector<int> adj[N];
+        vector<bool> used(N, false);
 
-        for(int i=1;i<=edges;i++){
-            int u,v;
-            cin>>u>>v;
+        int nodes, edges;
+        cin >> nodes >> edges;
+
+        for (int i = 1; i <= edges; i++) {
+            int u, v;
+            cin >> u >> v;
             adj[u].push_back(v);
             adj[v].push_back(u);
         }
 
-        function<void(int)> Dfs=[&](int j){
-            vis[j]=true;
-            for(auto u:adj[j]){
-                if(!vis[u]){
-                    Dfs(u);
+        auto Dfs = [&] (auto Dfs, int j) -> void {
+            if (used[j]) {
+                return;
+            }
+            used[j] = true;
+            for (auto u : adj[j]) {
+                if (!used[u]) {
+                    Dfs(Dfs ,u);
                 }
             }
-        };
+        };Dfs(Dfs ,1);
 
-        for(int i=1;i<=node;i++){
-            if(!vis[i]){
-                Dfs(i);
-            }
+        for (int i = 1; i <= nodes; i++) {
+            cout << used[i] << " \n"[i == nodes];
         }
 
-        for(int i=1;i<=node;i++){
-            cout<<vis[i]<<" \n"[i==node];
-        }
-
-    };DFS();
+    };Depth_First_Search();
     
-    auto BFS=[&](){
-        int node,edges;
-        cin>>node>>edges;
-        vector<int> adj[node+4],dst(node+4);
-        vector<bool> used(node+4);
-        queue<int> q;
+    auto Breadth_First_Search = [&] () -> void{
+        
+        const int N = 4E4 + 4;
+        vector<int> adj[N];
+        vector<bool> used(N, false);
+        vector<int> dis(N + 4, 0);
+        queue<int> Q;
+        int nodes, edges;
+        cin >> nodes >> edges;
 
-        for(int i=1;i<=edges;i++){
-            int u,v;
-            cin>>u>>v;
+        for (int i = 1; i <= edges; i++) {
+            int u, v;
+            cin >> u >> v;
             adj[u].push_back(v);
-            adj[v].push_back(u);
         }
 
-        int from;
-        cin>>from;
-
-        auto Bfs=[&](int j){
-            dst[j]=0;
-            q.push(j);
-
-            while(!q.empty()){
-                int s=q.front();
-                q.pop();
-                for(auto u:adj[s]){
-                    if(!used[u]){
-                        used[u]=true;
-                        dst[u]=dst[s]+1;
-                        q.push(u);
+        function<void(int)> Bfs = [&] (int j) -> void {
+            dis[j] = 0;
+            Q.push(j);
+            while (!Q.empty()) {
+                int a = Q.front();
+                Q.pop();
+                for (auto u : adj[a]) {
+                    if (!used[u]) {
+                        used[u] = true;
+                        dis[u] = dis[a] + 1;
+                        Q.push(u);
                     }
                 }
             }
+        };Bfs(1);
 
-            for(int i=1;i<=node;i++){
-                cout<<dst[i]<<" \n"[i==node];
-            }
-        };Bfs(from);
+        for (int i = 1; i <= nodes; i++) {
+            cout << dis[i] << " \n"[i == nodes];
+        }
 
-    };BFS();
+    };Breadth_First_Search();
 
-    auto CONNECTED_COMPS=[&](){
-        int node,edges;
-        cin>>node>>edges;
-        vector<int> adj[node+4];
-        vector<bool> used(node+4);
-        vector<vector<int>> connect_comps;
-        for(int i=1;i<=edges;i++){
-            int u,v;
-            cin>>u>>v;
+    auto Connected_Componets = [&] () -> void {
+
+        const int N = 4E4 + 4;
+        vector<int> adj[N];
+        vector<bool> used(N, false);
+        vector<vector<int>> comps;
+
+        int nodes, edges;
+        cin >> nodes >> edges;
+        for (int i = 1; i <= edges; i++) {
+            int u, v;
+            cin >> u >> v;
             adj[u].push_back(v);
             adj[v].push_back(u);
         }
 
-        function<void(int,vector<int>&)> Dfs=[&](int j,vector<int> &connect){
-            used[j]=true;
-            connect.push_back(j);
-            for(auto u:adj[j]){
-                if(!used[u]){
-                    Dfs(u,connect);
+        function<void(vector<int> &, int)> Dfs = [&] (vector<int> &c, int j) -> void {
+            used[j] = true;
+            c.push_back(j);
+            for (auto u : adj[j]) {
+                if (!used[u]) {
+                    Dfs(c, u);
                 }
             }
         };
 
-        for(int i=1;i<=node;i++){
-            if(!used[i]){
-                vector<int> connect;
-                Dfs(i,connect);
-                connect_comps.push_back(connect);
+        for (int i = 1; i <= nodes; i++) {
+            if (!used[i]) {
+                vector<int> c;
+                Dfs(c, i);
+                comps.push_back(c);
+                c.clear();
             }
         }
-        for(int i=0;i<(int)connect_comps.size();i++){
-            for(int j=0;j<(int)connect_comps[i].size();j++){
-                cout<<connect_comps[i][j]<<" \n"[j==(int)connect_comps[i].size()-1];
+
+        cout << (int)comps.size() << '\n';
+        for (auto x : comps) {
+            for (auto y : x) {
+                cout << y << " ";
             }
+            cout << '\n';
         }
-    };CONNECTED_COMPS();
+    };Connected_Componets();
 
 
-    auto TOP_SORT_AND_CYCLE_DETECTION=[&](){
-        int node,edges;
-        cin>>node>>edges;
-        vector<int> adj[node+4],top_sort;
-        vector<bool> used1(node+4),used2(node+4);
+    auto Top_Sort_and_Cycle_Detection = [&] () -> void {
 
-        for(int i=1;i<=edges;i++){
-            int u,v;
-            cin>>u>>v;
+        const int N = 4E4 + 4;
+        vector<int> adj[N];
+        vector<int> used1(N, false), used2(N, false);
+        vector<int> top_sort;
+
+        int nodes, edges;
+        cin >> nodes >> edges;
+        for (int i = 1; i <= edges; i++) {
+            int u, v;
+            cin >> u >> v;
             adj[u].push_back(v);
-            adj[v].push_back(u);
         }
 
-        function<void(int)> Dfs=[&](int j){
-            used1[j]=true;
-            used2[j]=true;
+        auto Dfs = [&] (auto Dfs, int j) -> void {
 
-            for(auto u:adj[j]){
-                if(!used1[u] and !used2[u]){
-                    Dfs(u);
+            if (used1[j]) {
+                return;
+            }
+
+            used1[j] = used2[j] = true;
+            for (auto u : adj[j]) {
+                if (!used1[u] and !used2[u]) {
+                    Dfs(Dfs, u);
                 }
-                else if(used2[u]){
-                    cout<<"Found the cycle"<<'\n';
+                else if (used2[u]) {
+                    cout << "Found the Cycle" << '\n';
                     exit(0);
                 }
             }
-            used2[j]=false;
+
+            used2[j] = false;
             top_sort.push_back(j);
         };
-        for(int i=1;i<=node;i++){
-            if(!used1[i]){
-                Dfs(i);
+
+        for (int i = 1; i <= nodes; i++) {
+            if (!used1[i]) {
+                Dfs(Dfs, i);
             }
         }
 
-        for(int i=1;i<(int)top_sort.size();i++){
-            cout<<top_sort[i]<<" \n"[i==(int)top_sort.size()-1];
+        reverse(begin(top_sort), end(top_sort));
+        for (int i = 0; i < (int)top_sort.size(); i++) {
+            cout << top_sort[i] << " \n"[i == (int)top_sort.size() - 1];
         }
 
-    };TOP_SORT_AND_CYCLE_DETECTION();
+    };Top_Sort_and_Cycle_Detection();
 
 
     
-    auto Bellman_Ford=[&](){
-        int node,edges;
-        cin>>node>>edges;
-        vector<tuple<int,int,int>> Graphs;
-        for(int i=1;i<=edges;i++){
-            int u,v,w;
-            cin>>u>>v>>w;
-            Graphs.push_back(make_tuple(u,v,w));
-        }
-        vector<int> dst(node+1,INT_MAX);
-        int from;
-        cin>>from;
-        dst[from]=0;
+    auto Bellman_Ford = [&] () -> void {
 
-        for(int i=1;i<node;i++){
-            for(auto x:Graphs){
-                int a,b,w;
-                tie(a,b,w)=x;
-                dst[b]=min(dst[b],dst[a]+w);
+        int nodes, edges;
+        cin >> nodes >> edges;
+        vector<tuple<int, int, int>> G;
+        vector<int> dis(nodes + 4, INT_MAX);
+        for (int i = 1; i <= edges; i++) {
+            int a, b, w;
+            cin >> a >> b >> w;
+            G.push_back(make_tuple(a, b, w));
+        }
+
+        int from;
+        cin >> from;
+        dis[from] = 0;
+
+        for (int i = 1; i + 1 < nodes; i++) {
+            for (auto u : G) {
+                int a, b, w;
+                tie(a, b, w) = u;
+                if (dis[a] + w < dis[b]) {
+                    dis[b] = dis[a] + w;
+                }
             }
         }
 
-        for(int i=1;i<=node;i++){
-            cout<<dst[i]<<" \n"[i==node];
+        for (int i = 1; i <= nodes; i++) {
+            cout << dis[i] << " \n"[i == nodes];
         }
-    };
-    Bellman_Ford();
 
-    auto DIJKSTRA=[&](){
-        int node,edges;
-        cin>>node>>edges;
-        vector<pair<int,int>> D_adj[node+4];
-        vector<int> dst(node+4,INT_MAX),visited(node+4,0);
-        priority_queue<pair<int,int>> pq;
+    };Bellman_Ford();
 
-        for(int i=1;i<=edges;i++){
-            int a,b,w;
-            cin>>a>>b>>w;
-            D_adj[a].push_back({b,w});
-            D_adj[b].push_back({a,w});
+    auto Dijkstra = [&] () -> void {
+
+        const int N = 4E4 + 4;
+        vector<pair<int, int>> adj[N];
+        vector<bool> used(N, false);
+        vector<int> dis(N, INT_MAX);
+        priority_queue<pair<int, int>> PQ;
+
+        int nodes, edges;
+        cin >> nodes >> edges;
+        for (int i = 1; i <= edges; i++) {
+            int a, b, w;
+            cin >> a >> b >> w;
+            adj[a].push_back({b, w});
+            adj[b].push_back({a, w});
         }
 
         int from;
-        cin>>from;
+        cin >> from;
 
-        auto Dijkstra=[&](){
-            dst[from]=0;
-            pq.push({0,from});
-
-            while(!pq.empty()){
-                int a=pq.top().second;
-                pq.pop();
-                
-                if(visited[a]){
-                    continue;
+        dis[from] = 0; 
+        PQ.push({0, from});
+        while (!PQ.empty()) {
+            int a = PQ.top().second;
+            PQ.pop();
+            if (used[a]) {
+                continue;
+            }
+            used[a] = true;
+            for (auto u : adj[a]) {
+                int b = u.first;
+                int w = u.second;
+                if (dis[a] + w < dis[b]) {
+                    dis[b] = dis[a] + w;
+                    PQ.push({-dis[b], b});
                 }
-                visited[a]=true;
-                for(auto u:D_adj[a]){
-                    int b=u.first;
-                    int w=u.second;
+            }
+        }
 
-                    if(dst[a]+w<dst[b]){
-                        dst[b]=dst[a]+w;
-                        pq.push({-dst[b],b});
+        for (int i = 1; i <= nodes; i++) {
+            cout << dis[i] << " \n"[i == nodes];
+        }
+
+    };Dijkstra();
+
+    auto Floyd_Warshall = [&] () -> void {
+
+        int nodes, edges;
+        cin >> nodes >> edges;
+        vector<vector<long>> adj(nodes + 1, vector<long> (nodes + 1, INT_MAX));
+
+        for (int i = 1; i <= nodes; i++) {
+            adj[i][i] = 0;
+        }
+        for (int i = 1; i <= edges; i++) {
+            long a, b, w;
+            cin >> a >> b >> w;
+            adj[a][b] = min(adj[a][b], w);
+            adj[b][a] = min(adj[b][a], w);
+        }
+
+        for (int k = 1; k <= nodes; k++) {
+            for (int i = 1; i <= nodes; i++) {
+                for (int j = 1; j <= nodes; j++) {
+                    adj[i][j] = min(adj[i][j], adj[i][k] + adj[k][j]);
+                }
+            }
+        }
+
+        for (int i = 1; i <= nodes; i++) {
+            for (int j = 1; j <= nodes; j++) {
+                cout << adj[i][j] << " \n"[j == nodes];
+            }
+        }
+
+    };Floyd_Warshall();
+
+    auto Kruskal_min = [&] () -> void {
+        
+        struct Edge {
+            int u, v, weight;
+            bool operator < (Edge const &other) {
+                return weight < other.weight;
+            }
+        };
+
+        vector<Edge> tree, MST;
+        int nodes, edges, cost = 0;
+        cin >> nodes >> edges;
+        for (int i = 1; i <= edges; i++) {
+            int a, b, w;
+            cin >> a >> b >> w;
+            tree.push_back({a, b, w});
+            tree.push_back({b, a, w});
+        }
+
+        sort(begin(tree), end(tree));
+        vector<int> tree_id(nodes + 4, 0);
+        iota(begin(tree_id), end(tree_id), 0);
+
+        for (auto e : tree) {
+            if (tree_id[e.u] != tree_id[e.v]) {
+                cost += e.weight;
+                MST.push_back(e);
+
+                int old_id = tree_id[e.u], new_id = tree_id[e.v];
+                for (int i = 1; i <= nodes; i++) {
+                    if (tree_id[i] == old_id) {
+                        tree_id[i] = new_id;
                     }
+                }
+            }
+        }
+
+        cout << "Cost: " << cost << '\n';
+        cout << "Edge" << setw(8) << "Weight" << '\n';
+        for (auto e : MST) {
+            cout << e.u << '-' << e.v << setw(6) << e.weight << '\n';
+        }
+
+    };Kruskal_min();
+
+    auto Kruskal_max = [&] () -> void {
+
+        struct Edge {
+            int u, v, weight;
+            bool operator < (Edge const &other) {
+                return weight > other.weight;
+            }
+        };
+
+        vector<Edge> tree, MST;
+        int cost = 0, nodes, edges;
+        cin >> nodes >> edges;
+        for (int i = 1; i <= edges; i++) {
+            int a, b, w;
+            cin >> a >> b >> w;
+            tree.push_back({a, b, w});
+            tree.push_back({b, a, w});
+        }
+
+        sort(begin(tree), end(tree));
+        vector<int> tree_id(nodes + 4, 0);
+        iota(begin(tree_id), end(tree_id), 0);
+
+        for (auto e : tree) {
+            if (tree_id[e.u] != tree_id[e.v]) {
+                cost += e.weight;
+                MST.push_back(e);
+
+                int old_id = tree_id[e.u], new_id = tree_id[e.v];
+                for (int i = 1; i <= nodes; i++) {
+                    if (tree_id[i] == old_id) {
+                        tree_id[i] = new_id;
+                    }
+                }
+            }
+        }
+
+        cout << "Cost: " << cost << '\n';
+        cout << "Edge" << setw(8) << "Weight" << '\n';
+        for (auto e : MST) {
+            cout << e.u << '-' << e.v << setw(6) << e.weight << '\n';
+        }
+        
+    };Kruskal_max();
+
+    auto Kruskal_DSU = [&] () -> void {
+
+        struct Edge {
+            int u, v, weight;
+            bool operator < (Edge const &other) {
+                return weight < other.weight;
+            }
+        };
+
+        int nodes, edges, cost = 0;
+        cin >> nodes >> edges;
+        vector<int> parent(nodes + 4, 0), rnk(nodes + 4, 0);
+
+        auto make_set = [&] (int v) -> void {
+            parent[v] = v;
+            rnk[v] = 0;
+        };
+
+        auto find_set = [&] (auto find_set, int v) -> int {
+            if (v == parent[v]) {
+                return v;
+            }
+            return parent[v] = find_set(find_set, parent[v]);
+        };
+
+        auto union_set = [&] (int a, int b) -> void {
+            a = find_set(find_set, a);
+            b = find_set(find_set, b);
+
+            if (a != b) {
+                if (rnk[a] < rnk[b]) {
+                    swap(a, b);
+                }
+                parent[b] = a;
+                if (rnk[a] == rnk[b]) {
+                    rnk[a]++;
                 }
             }
         };
-        Dijkstra();
 
-        for(int i=1;i<=node;i++){
-            cout<<dst[i]<<" \n"[i==node];
-        }
-    };
-    DIJKSTRA();
+        vector<Edge> tree, MST;
+        for (int i = 1; i <= edges; i++) {
+            int a, b, w;
+            cin >> a >> b >> w;
+            tree.push_back({a, b, w});
+            tree.push_back({b, a, w});
+        }        
 
-    auto Floyd_Warshall=[&](){
-        int F_node,F_edges;
-        cin>>F_node>>F_edges;
+        sort(begin(tree), end(tree));
 
-        vector<vector<int>> Floyd(F_node+4,vector<int>(F_node+4,INT_MAX));
-        for(int i=1;i<=F_node;i++){
-            Floyd[i][i]=0;
+        for (int i = 0; i <= nodes; i++) {
+            make_set(i);
         }
 
-        for(int i=1;i<=F_edges;i++){
-            int a,b,c;
-            cin>>a>>b>>c;
-            Floyd[a][b]=min(Floyd[a][b],c);
-            Floyd[b][a]=min(Floyd[b][a],c);
-        }
-
-        for(int k=1;k<=F_node;k++){
-            for(int i=1;i<=F_node;i++){
-                for(int j=1;j<=F_node;j++){
-                    Floyd[i][j]=min(Floyd[i][j],Floyd[i][k]+Floyd[k][j]);
-                }
+        for (auto e : tree) {
+            if (find_set(find_set, e.u) != find_set(find_set, e.v)) {
+                cost += e.weight;
+                MST.push_back(e);
+                union_set(e.u, e.v);
             }
         }
 
-        for(int i=1;i<=F_node;i++){
-            for(int j=1;j<=F_node;j++){
-                cout<<Floyd[i][j]<<" ";
-            }
-            cout<<'\n';
+        cout << "Cost: " << cost << '\n';
+        cout << "Edge" << setw(8) << "Weight" << '\n';
+        for (auto e : MST) {
+            cout << e.u << '-' << e.v << setw(6) << e.weight << '\n';
         }
-    };
-    Floyd_Warshall();
 
-    auto KRUSKAL=[&](){
+    };Kruskal_DSU();
 
-        int node,edges;
-        cin>>node>>edges;
+    auto Class_DSU = [&] () -> void {
 
-        auto kruskal_min=[&](){
-            struct Edge{
-                int u,v,weight;
-                bool operator<(Edge const &other){
-                    return weight<other.weight;
-                }
-            };
-
-            vector<Edge> tree,MST;
-            int cost=0;
-            for(int i=1;i<=edges;i++){
-                int a,b,c;
-                cin>>a>>b>>c;
-                tree.push_back({a,b,c});
-                tree.push_back({b,a,c});
-            }
-
-            vector<int> tree_id(node+4);
-            iota(tree_id.begin(),tree_id.end(),0);
-            sort(tree.begin(),tree.end());
-            
-            for(auto e:tree){
-                if(tree_id[e.u]!=tree_id[e.v]){
-                    cost+=e.weight;
-                    MST.push_back(e);
-
-                    int old_id=tree_id[e.u],new_id=tree_id[e.v];
-                    for(int i=1;i<=node;i++){
-                        if(tree_id[i]==old_id){
-                            tree_id[i]=new_id;
-                        }
-                    }
-                }
-            }
-            cout<<"Cost is: "<<cost<<'\n';
-            cout<<"Edge"<<setw(8)<<"Weight"<<'\n';
-            for(auto x:MST){
-                cout<<x.u<<'-'<<x.v<<setw(6)<<x.weight<<'\n';
-            }
-
-        };kruskal_min();
-
-
-        auto kruskal_max=[&](){
-            struct Edge{
-                int u,v,weight;
-                bool operator<(Edge const &other){
-                    return weight>other.weight;
-                }
-            };
-
-            vector<Edge> tree,MST;
-            int cost=0;
-            for(int i=1;i<=edges;i++){
-                int a,b,c;
-                cin>>a>>b>>c;
-                tree.push_back({a,b,c});
-                tree.push_back({b,a,c});
-            }
-
-            vector<int> tree_id(node+4);
-            iota(tree_id.begin(),tree_id.end(),0);
-            sort(tree.begin(),tree.end());
-            
-            for(auto e:tree){
-                if(tree_id[e.u]!=tree_id[e.v]){
-                    cost+=e.weight;
-                    MST.push_back(e);
-
-                    int old_id=tree_id[e.u],new_id=tree_id[e.v];
-                    for(int i=1;i<=node;i++){
-                        if(tree_id[i]==old_id){
-                            tree_id[i]=new_id;
-                        }
-                    }
-                }
-            }
-            cout<<"Cost is: "<<cost<<'\n';
-            cout<<"Edge"<<setw(8)<<"Weight"<<'\n';
-            for(auto x:MST){
-                cout<<x.u<<'-'<<x.v<<setw(6)<<x.weight<<'\n';
-            }
-
-        };kruskal_max();
-
-        auto Kruskal_DSU=[&](){
-            struct Edge{
-                int u,v,weight;
-                bool operator<(Edge const &other){
-                    return weight<other.weight;
-                }
-            };
-
-            vector<int> parent(node+4),rnk(node+4);
-
-            auto make_set=[&](int v){
-                parent[v]=v;
-                rnk[v]=0;
-            };
-
-            auto find_set=[&](auto find_set,int v){
-                if(v==parent[v]){
-                    return v;
-                }
-                return parent[v]=find_set(find_set,parent[v]);
-            };
-
-            auto union_set=[&](int a,int b){
-                a=find_set(find_set,a);
-                b=find_set(find_set,b);
-                if(a!=b){
-                    if(rnk[a]<rnk[b]){
-                        swap(a,b);
-                    }
-                    parent[a]=b;
-                    if(rnk[a]==rnk[b]){
-                        rnk[a]++;
-                    }
-                }
-            };
-
-            vector<Edge> tree,MST;
-            int cost=0;
-            for(int i=1;i<=edges;i++){
-                int a,b,c;
-                cin>>a>>b>>c;
-                tree.push_back({a,b,c});
-                tree.push_back({b,a,c});
-            }
-            sort(tree.begin(),tree.end());
-            for(int i=0;i<node;i++){
-                make_set(i);
-            }
-
-            for(auto e:tree){
-                if(find_set(find_set,e.u)!=find_set(find_set,e.v)){
-                    cost+=e.weight;
-                    MST.push_back(e);
-                    union_set(e.u,e.v);
-                }
-            }
-
-            cout<<"Cost is: "<<cost<<'\n';
-            cout<<"Edges"<<setw(8)<<"Weight"<<'\n';
-            for(auto x:MST){
-                cout<<x.u<<'-'<<x.v<<setw(6)<<x.weight<<'\n';
-            }
-
-        };Kruskal_DSU();
-
-        auto Class_DSU=[&]{
-            struct Edge{
-                int u,v,weight;
-                bool operator<(Edge const &other){
-                    return weight<other.weight;
-                }
-            };
-
-            class Disjoint_Set_Union{
-                public:
+        class DSU {
+            public:
                 vector<int> parents,sizes;
-                Disjoint_Set_Union(int n){
-                    parents.resize(n+4);
-                    sizes.resize(n+4,1);
-                    iota(parents.begin(),parents.end(),0);
+
+                DSU(int n) {
+                    parents.resize(n + 4);
+                    sizes.resize(n + 4, 1);
+                    iota(begin(parents), end(parents), 0);
                 }
 
-                int root(int v){
-                    return (parents[v]==v?v:parents[v]=root(parents[v]));
+                int root(int v) {
+                    if (v == parents[v]) {
+                        return v;
+                    }
+                    return parents[v] = root(parents[v]);
                 }
 
-                bool join(int u,int v){
-                    int a=root(u);
-                    int b=root(v);
-                    if(a==b){
+                bool unite(int a, int b) {
+                    a = root(a);
+                    b = root(b);
+
+                    if (a == b) {
                         return false;
                     }
-                    if(sizes[a]<sizes[b]){
-                        swap(a,b);
+
+                    if (sizes[a] > sizes[b]) {
+                        swap(a, b);
                     }
-                    parents[a]=b;
-                    sizes[b]+=sizes[a];
+                    parents[a] = b;
+                    sizes[b] += sizes[a];
                     return true;
                 }
-            };
 
-            vector<Edge> tree,MST;
-            int cost=0;
-            for(int i=1;i<=edges;i++){
-                int a,b,c;
-                cin>>a>>b>>c;
-                tree.push_back({a,b,c});
-                tree.push_back({b,a,c});
+        };
+
+        struct Edge {
+            int u, v, weight;
+            bool operator < (Edge const &other) {
+                return weight < other.weight;
             }
-            sort(tree.begin(),tree.end());
-            Disjoint_Set_Union DSU(node+4);
-            for(auto e:tree){
-                if(DSU.root(e.u)!=DSU.root(e.v)){
-                    cost+=e.weight;
-                    MST.push_back(e);
-                    DSU.join(e.u,e.v);
-                }
+        };
+
+        int nodes, edges, cost = 0;
+        cin >> nodes >> edges;
+        vector<Edge> tree, MST;
+
+        for (int i = 1; i <= edges; i++) {
+            int a, b, w;
+            cin >> a >> b >> w;
+            tree.push_back({a, b, w});
+            tree.push_back({b, a, w});
+        }
+
+        sort(begin(tree), end(tree));
+        DSU D(nodes);
+        
+        for (auto e :  tree) {
+            if (D.root(e.u) != D.root(e.v)) {
+                cost += e.weight;
+                MST.push_back(e);
+                D.unite(e.u, e.v);
             }
+        }
 
-            cout<<"Cost is: "<<cost<<'\n';
-            cout<<"Edges"<<setw(8)<<"Weight"<<'\n';
-            for(auto x:MST){
-                cout<<x.u<<'-'<<x.v<<setw(6)<<x.weight<<'\n';
-            }
+        cout << "Cost: " << cost << '\n';
+        cout << "Edges" << setw(8) << "Weight" << '\n';
+        for (auto e : MST) {
+            cout << e.u << '-' << e.v << setw(6) << e.weight << '\n';
+        }
 
-        };Class_DSU();
-
-    };KRUSKAL();
+    };Class_DSU();
 
     return 0;
     
