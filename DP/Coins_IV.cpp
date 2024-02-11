@@ -1,4 +1,4 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
 int main() {
@@ -22,7 +22,7 @@ int main() {
         dp[0][0] = 1;
         for (int i = 1; i <= n; i++) {
             for (int j = 0; j <= target; j++) {
-                dp[i][j] = dp[i - 1][j];
+                dp[i][j] = dp[i - 1][j]; //not using the current coins
                 int left = j - coins[i - 1];
                 if (left >= 0) {
                     ((dp[i][j] += dp[i][left]) %= md);
