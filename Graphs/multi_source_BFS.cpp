@@ -1,4 +1,4 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
 void Multisource_BFS(vector<int> adj[], vector<int> visited, vector<int> &dist, queue<int> Q) {
