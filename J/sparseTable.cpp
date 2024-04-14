@@ -5,7 +5,7 @@ template <class T>
 struct sparseTable { // 0 - indexed
 
     T op(T a, T b) {
-        return min(a, b);
+        return min(a, b); // max(a, b), a & b, and etc.....
     }
 
     int n;
