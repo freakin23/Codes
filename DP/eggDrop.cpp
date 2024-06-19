@@ -25,7 +25,7 @@ int eggDrop(vector<vector<int>> &dp, int eggs, int floors) { // TC -> O(eggs * f
 }
 
 int eggDrop(int eggs, int floors) { // TC -> O(eggs * floors)
-    vector<vector<int>> dp(floors + 1, vector<int> (eggs, 0));
+    vector<vector<int>> dp(floors + 1, vector<int> (eggs + 1, 0));
     int res = 0;
     while (dp[res][eggs] < floors) {
         res++;
