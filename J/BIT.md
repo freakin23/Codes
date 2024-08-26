@@ -1,5 +1,5 @@
-- **Left Shift** : $(x << k) \rightarrow x * 2^k$
-- **Right Shift** : $(x >> k) \rightarrow x / 2^k$
+- $(x << k) \rightarrow x * 2^k$
+- $(x >> k) \rightarrow x / 2^k$
 - $(1 << k)$ : Has a one bit in position $k$ and all other bits are zero
 - The $k^{th}$ bit of a number is one exactly when $x$ & $(1 << k)$ is not zero
 - $x$ | $(1 << k) \rightarrow$ Sets the $k^{th}$ bit of $x$ to one
