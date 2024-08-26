@@ -1,0 +1,11 @@
+- **Left Shift** : $(x << k) \rightarrow x * 2^k$
+- **Right Shift** : $(x >> k) \rightarrow x / 2^k$
+- $(1 << k)$ : Has a one bit in position $k$ and all other bits are zero
+- The $k^{th}$ bit of a number is one exactly when $x$ & $(1 << k)$ is not zero
+- $x$ | $(1 << k) \rightarrow$ Sets the $k^{th}$ bit of $x$ to one
+- $x$ & $~(1 << k) \rightarrow$ Sets the $k^{th}$ bit of $x$ to zero
+- $x$ ^ $(1 << k) \rightarrow$  Inverts the $k^{th}$ bit of x
+- $x$ & $(x - 1) \rightarrow$ Sets the last one bit of $x$ to zero
+- $x$ & $-x \rightarrow$ Sets all one bits to zero, except for the last one bit
+- $x$ | $(x - 1) \rightarrow$ Inverts all the bits after the last one bit
+- $x$ is a power of 2 exactly when $x$ & $(x - 1)$ = 0
