@@ -39,6 +39,27 @@ void phi_1_to_n(int n) {
     }
 }
 
+// runs in O(n log n)
+// using divisor sum property 
+void phi_1_to_n(int n) {
+    vector<int> phi(n + 1);
+    phi[0] = 0;
+    phi[1] = 1;
+    for (int i = 2; i <= n; i++) {
+        phi[i] = i - 1;
+    }
+
+    for (int i = 2; i <= n; i++) {
+        for (int j = 2 * i; j <= n; j += i) {
+            phi[j] -= phi[i];
+        }
+    }
+
+    for (int i = 1; i <= n; i++) {
+        cout << phi[i] << " \n"[i == n];
+    }
+}
+
 int main() {
     cout << phi(6) << '\n'; //  2
     cout << phi(12) << '\n'; //  4
