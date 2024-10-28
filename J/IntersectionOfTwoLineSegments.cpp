@@ -1,3 +1,5 @@
+// cp-algo: https://cp-algorithms.com/geometry/segments-intersection.html
+
 #include <bits/stdc++.h>
 using namespace std;
 
