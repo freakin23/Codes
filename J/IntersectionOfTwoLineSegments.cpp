@@ -1,8 +1,9 @@
-// cp-algo: https://cp-algorithms.com/geometry/segments-intersection.html
+// Problem Link: https://open.kattis.com/problems/segmentintersection
 
 #include <bits/stdc++.h>
 using namespace std;
 
+// https://cp-algorithms.com/geometry/segments-intersection.html
 const double EPS = 1E-9;
 
 struct Point {
