@@ -1,3 +1,6 @@
+// Problem Link: https://cses.fi/problemset/task/1669
+// Blog: https://cp-algorithms.com/graph/finding-cycle.html
+
 #include <bits/stdc++.h>
 #define i64 long long
 
