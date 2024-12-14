@@ -4,8 +4,8 @@ class Prefix_Function {
     public:
     std::vector<int> pi;
     std::vector<int> occurence;
-    std::string s, t; // s -> pattern, t -> text
-    int n, pat_sz = 0, f = 0;
+    std::string s, t;
+    int n, pat_sz = -1, f = 0;
     Prefix_Function(std::string const& s, std::string const& t = "") {
         f = (int)t.size();
         this->s = s;
@@ -39,35 +39,43 @@ class Prefix_Function {
         }
     }
 
+    std::vector<int> prefix_occurence() {
+        std::vector<int> res(n + 1);
+        for (int i = pat_sz + 1; i < n; i++) {
+            res[pi[i]]++;
+        }
+        for (int i = n - 1; i > pat_sz + 1; i--) {
+            res[pi[i - 1]] += res[i]; 
+        }
+
+        if (pat_sz == -1) {
+            for (int i = 0; i <= n; i++) {
+                res[i]++;
+            }
+        }
+        
+        return res;
+    }
+
     void build() {
         s = (f ? s + '#' + t : s);
         prefix_function(s);
     }
 };
 
-std::vector<int> prefix_function(std::string const& s) {
-    int n = (int)s.size();
-    std::vector<int> pi(n);
-    for (int i = 1; i < n; i++) {
-        int j = pi[i - 1];
-        while (j > 0 and s[i] != s[j]) {
-            j = pi[j - 1];
-        }
-        if (s[i] == s[j]) {
-            j++;
-        }
-        pi[i] = j;
-    }
-    return pi;
-}
-
 int main() {
     std::string s, t;
     std::cin >> s >> t;
+    // std::string s = "abc", t = "aaaabccbabcrgsgabcccca";
     Prefix_Function pf = Prefix_Function(s, t);
     pf.build();
     for (int i = 0; i < (int)pf.occurence.size(); i++) {
         std::cout << pf.occurence[i] << " \n"[i == (int)pf.occurence.size() - 1];
+    }
+
+    std::vector<int> pf_res = pf.prefix_occurence();
+    for (int i = 1; i <= pf.pat_sz; i++) {
+        std::cout << pf_res[i] << " \n"[i == pf.pat_sz];
     }
 
     std::string a = "aabaaab";
@@ -75,5 +83,10 @@ int main() {
     A.build();
     for (int i = 0; i < (int)A.pi.size(); i++) {
         std::cout << A.pi[i] << " \n"[i == (int)A.pi.size() - 1];
+    }
+
+    std::vector<int> A_res = A.prefix_occurence();
+    for (int i = 1; i <= A.n; i++) {
+        std::cout << A_res[i] << " \n"[i == A.n];
     }
 }
