@@ -4,7 +4,7 @@ class Prefix_Function {
     public:
     std::vector<int> pi;
     std::vector<int> occurence;
-    std::string s, t;
+    std::string s, t; // s -> pattern, t -> text
     int n, pat_sz = 0, f = 0;
     Prefix_Function(std::string const& s, std::string const& t = "") {
         f = (int)t.size();
