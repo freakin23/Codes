@@ -1,5 +1,10 @@
 #include <bits/stdc++.h>
 
+/*
+p = 53 if both uppercase and lowercase letters present
+https://cp-algorithms.com/string/string-hashing.html#improve-no-collision-probability
+*/
+
 long long compute_hash(std::string st) {
 	const int p = 31;
 	const int m = 1e9 + 9;
