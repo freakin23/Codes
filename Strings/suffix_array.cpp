@@ -84,6 +84,13 @@ public:
             p[i] = p[i + 1];
         }
     }
+    
+    // k = floor(log l), l = length, {i, j} = starting indexes
+    int compare(int i, int j, int l, int k) { 
+        std::pair<int, int> a = {c[k][i], c[k][(i + l - (1 << k)) % n]};
+        std::pair<int, int> b = {c[k][j], c[k][(j + l - (1 << k)) % n]};
+        return a == b ? 0 : a < b ? -1 : 1;
+    }
 
     // Longest common prefix of two substrings with additional memory
     int lcp(int i, int j) {
