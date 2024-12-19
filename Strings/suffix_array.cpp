@@ -80,9 +80,7 @@ public:
 
     void generate() {
         sort_cyclic_shifts();
-        for (int i = 0 ; i < (int) s.size() - 1; ++i) {
-            p[i] = p[i + 1];
-        }
+        p.erase(p.begin());
     }
 
     // k = floor(log l), l = length, {i, j} = starting indexes
@@ -134,22 +132,28 @@ public:
     // No. of different substrings = (n^2 + n) / 2 - sigma(i = 0 to n - 2)lcp[i]    
 };
 
-int main() {
-    std::string t;
-    std::cin >> t;
-    int n = (int)t.size();
-    t += '#';
-    Suffix_Array sa = Suffix_Array(t);
-    sa.generate();
-    int len = 0;
-    int pos = -1;
-    for (int i = 0; i < n - 1; i++) {
-        int curr_len = sa.lcp(sa.p[i], sa.p[i + 1]);
-        if (len < curr_len) {
-            len = curr_len;
-            pos = sa.p[i];
+class Solution {
+public:
+    std::string longestDupSubstring(std::string s) {
+        int n = (int)s.size();
+        s += '$';
+        Suffix_Array sa = Suffix_Array(s);
+        sa.generate();
+        int len = 0, pos = -1;
+        for (int i = 0; i < sa.p.size() - 1; i++) {
+            int curr_len = sa.lcp(sa.p[i], sa.p[i + 1]);
+            if (len < curr_len) {
+                len = curr_len;
+                pos = sa.p[i];
+            }
         }
+        return (pos == -1 ? "" : s.substr(pos, len));
     }
+};
 
-    std::cout << (pos == -1 ? "" : t.substr(pos, len)) << '\n';
+int main() {
+    std::string s;
+    std::cin >> s;
+    Solution obj = Solution();
+    std::cout << obj.longestDupSubstring(s) << '\n';
 }
