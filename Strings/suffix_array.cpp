@@ -84,7 +84,7 @@ public:
             p[i] = p[i + 1];
         }
     }
-    
+
     // k = floor(log l), l = length, {i, j} = starting indexes
     int compare(int i, int j, int l, int k) { 
         std::pair<int, int> a = {c[k][i], c[k][(i + l - (1 << k)) % n]};
@@ -130,6 +130,8 @@ public:
         }
         return lcp;
     }
+
+    // No. of different substrings = (n^2 + n) / 2 - sigma(i = 0 to n - 2)lcp[i]    
 };
 
 int main() {
