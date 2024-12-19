@@ -58,7 +58,7 @@ public:
             for (int i = 1; i < classes; i++) {
                 cnt[i] += cnt[i - 1];
             }
-            for (int i = n-1; i >= 0; i--) {
+            for (int i = n - 1; i >= 0; i--) {
                 p[--cnt[c[h][pn[i]]]] = pn[i];
             }
             cn[p[0]] = 0;
